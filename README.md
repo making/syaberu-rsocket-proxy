@@ -1,6 +1,6 @@
 # RSocket Proxy for [Syaberu](https://github.com/making/syaberu)
 
-1. Download latest syaberu from [repository](https://oss.sonatype.org/content/repositories/snapshots/am/ik/lab/syaberu/0.0.1-SNAPSHOT) 
+1. Download latest syaberu from [repository](https://oss.sonatype.org/content/repositories/snapshots/am/ik/lab/syaberu-server/0.0.1-SNAPSHOT/) 
 
 1. Download latest syaberu-rsocket-proxy from [repository](https://oss.sonatype.org/content/repositories/snapshots/am/ik/lab/syaberu-rsocket-proxy/0.0.1-SNAPSHOT) 
 
