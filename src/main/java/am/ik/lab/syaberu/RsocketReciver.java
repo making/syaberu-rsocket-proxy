@@ -27,10 +27,12 @@ import java.util.stream.Collectors;
 @RestController
 public class RsocketReciver {
     private final Logger log = LoggerFactory.getLogger(RsocketReciver.class);
+    private final ApiKeyEncryptor apiKeyEncryptor;
     private final ConcurrentHashMap<String, List<RSocketRequester>> requestersMap = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
 
-    public RsocketReciver(ObjectMapper objectMapper) {
+    public RsocketReciver(ApiKeyEncryptor apiKeyEncryptor, ObjectMapper objectMapper) {
+        this.apiKeyEncryptor = apiKeyEncryptor;
         this.objectMapper = objectMapper;
     }
 
@@ -52,7 +54,7 @@ public class RsocketReciver {
         return exchange.getFormData()
                 .map(form -> new LinkedHashMap<String, String>() {
                     {
-                        put("apiKey", apiKey);
+                        put("apiKey", RsocketReciver.this.apiKeyEncryptor.encrypt(apiKey));
                         put("text", form.getFirst("text"));
                         put("speaker", form.getFirst("speaker"));
                         put("emotion", form.getFirst("emotion"));
