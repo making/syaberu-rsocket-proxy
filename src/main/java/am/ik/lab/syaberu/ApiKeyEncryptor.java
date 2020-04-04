@@ -12,6 +12,10 @@ public class ApiKeyEncryptor {
     }
 
     public String encrypt(String apiKey) {
+        if (apiKey.startsWith(PREFIX)) {
+            // already encrypted
+            return apiKey;
+        }
         return PREFIX + config.textEncryptor().encrypt(apiKey);
     }
 }
