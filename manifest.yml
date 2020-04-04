@@ -2,6 +2,8 @@ applications:
 - name: syaberu-rsocket-proxy
   path: target/syaberu-rsocket-proxy-0.0.1-SNAPSHOT.jar
   memory: 256m
+  services:
+  - syaberu-encryption
   env:
     ENCRYPTION_PASSWORD: ${vcap.services.syaberu-encryption.credentials.password}
     ENCRYPTION_SALT: ${vcap.services.syaberu-encryption.credentials.salt}
