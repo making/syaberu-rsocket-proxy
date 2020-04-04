@@ -4,6 +4,7 @@ applications:
   memory: 256m
   services:
   - syaberu-encryption
+  - prometheus-rsocket-proxy
   env:
     ENCRYPTION_PASSWORD: ${vcap.services.syaberu-encryption.credentials.password}
     ENCRYPTION_SALT: ${vcap.services.syaberu-encryption.credentials.salt}
@@ -13,3 +14,5 @@ applications:
     MANAGEMENT_METRICS_TAGS_SPACE: ${vcap.application.space_name}
     MANAGEMENT_METRICS_TAGS_APPLICATION: ${vcap.application.application_name}
     MANAGEMENT_METRICS_TAGS_INSTANCE_ID: ${management.metrics.tags.application}:${vcap.application.instance_index}
+    MANAGEMENT_METRICS_EXPORT_PROMETHEUS_RSOCKET_HOST: ${vcap.services.prometheus-rsocket-proxy.credentials.host}
+    MANAGEMENT_METRICS_EXPORT_PROMETHEUS_RSOCKET_PORT: ${vcap.services.prometheus-rsocket-proxy.credentials.port}
