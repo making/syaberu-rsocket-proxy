@@ -58,4 +58,4 @@ jobs:
         tar xzf cf.tgz
         rm -f LICENSE NOTICE cf.tgz
         ./cf7 login -a ${CF_API} -u ${CF_USERNAME} -p ${CF_PASSWORD} -o ${CF_ORG} -s ${CF_SPACE}
-        ./cf7 push syaberu-rsocket-proxy --strategy rolling -p target/syaberu-*.jar -m 768m
+        ./cf7 push --strategy rolling
