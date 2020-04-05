@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.stream.Stream;
 
 @Component
@@ -30,7 +31,8 @@ public class CallScheduler {
             return;
         }
         this.scheduledCallRepository.findScheduledOrderByScheduledAt()
-                .flatMapSequential(scheduledCall -> {
+                .delayElements(Duration.ofSeconds(3))
+                .flatMap(scheduledCall -> {
                     log.info("Calling {}", scheduledCall);
                     return this.rsocketHandler
                             .send(scheduledCall.getSubscriptionId(),
@@ -40,7 +42,7 @@ public class CallScheduler {
                                     scheduledCall.getApiKey())
                             .flatMap(__ -> this.scheduledCallRepository.changeStateById(scheduledCall.getId(), CallState.SUCCEEDED, scheduledCall.getScheduledAt()))
                             .onErrorResume(e -> this.scheduledCallRepository.changeStateById(scheduledCall.getId(), CallState.FAILED, scheduledCall.getScheduledAt()));
-                }, 1)
+                })
                 .subscribe();
     }
 }
