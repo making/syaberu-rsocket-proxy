@@ -40,7 +40,7 @@ public class ScheduledCallRepository {
                 .matching(where("subscription_id").is(subscriptionId)
                         .and(where("scheduled_at").greaterThanOrEquals(ago)))
                 .orderBy(Sort.Order.asc("scheduled_at"))
-                .page(PageRequest.of(0, 50))
+                .page(PageRequest.of(0, 20))
                 .fetch()
                 .all();
     }
