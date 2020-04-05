@@ -34,11 +34,11 @@ public class ScheduledCallRepository {
     }
 
     public Flux<ScheduledCall> findOrderByScheduledAt(String subscriptionId) {
-        final LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+        final LocalDateTime ago = LocalDateTime.now().minusHours(3);
         return this.databaseClient.select()
                 .from(ScheduledCall.class)
                 .matching(where("subscription_id").is(subscriptionId)
-                        .and(where("scheduled_at").greaterThanOrEquals(yesterday)))
+                        .and(where("scheduled_at").greaterThanOrEquals(ago)))
                 .orderBy(Sort.Order.asc("scheduled_at"))
                 .page(PageRequest.of(0, 50))
                 .fetch()
