@@ -62,13 +62,12 @@ public class ScheduledCall {
 
     @Override
     public String toString() {
-        return "ScheduledCall{" +
+        return "{" +
                 "id='" + id + '\'' +
                 ", subscriptionId='" + subscriptionId + '\'' +
                 ", text='" + text + '\'' +
                 ", speaker='" + speaker + '\'' +
                 ", emotion='" + emotion + '\'' +
-                ", apiKey='" + apiKey + '\'' +
                 ", scheduledAt=" + scheduledAt +
                 ", state=" + state +
                 '}';

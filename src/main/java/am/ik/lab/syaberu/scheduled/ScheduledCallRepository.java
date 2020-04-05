@@ -55,10 +55,12 @@ public class ScheduledCallRepository {
     }
 
     @Transactional
-    public Mono<Void> changeStateById(String id, CallState state) {
+    public Mono<Void> changeStateById(String id, CallState state, LocalDateTime scheduledAt) {
         return this.databaseClient.update()
                 .table("scheduled_call")
-                .using(Update.update("state", state))
+                .using(Update
+                        .update("state", state)
+                        .set("scheduled_at", scheduledAt))
                 .matching(where("id").is(id))
                 .then();
     }
