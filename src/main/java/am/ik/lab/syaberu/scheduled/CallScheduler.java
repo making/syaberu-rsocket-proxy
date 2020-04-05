@@ -30,7 +30,7 @@ public class CallScheduler {
             return;
         }
         this.scheduledCallRepository.findScheduledOneOrderByScheduledAt()
-                .doOnSuccess(scheduledCall -> log.info("scheduling {}", scheduledCall))
+                .doOnNext(scheduledCall -> log.info("scheduling {}", scheduledCall))
                 .flatMap(scheduledCall -> this.rsocketHandler
                         .send(scheduledCall.getSubscriptionId(),
                                 scheduledCall.getText(),
