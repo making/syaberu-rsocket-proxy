@@ -29,7 +29,7 @@ public class CallScheduler {
         if (index != 0) {
             return;
         }
-        this.scheduledCallRepository.findScheduledOneOrderByScheduledAt()
+        this.scheduledCallRepository.findScheduledOrderByScheduledAt()
                 .doOnNext(scheduledCall -> log.info("scheduling {}", scheduledCall))
                 .flatMap(scheduledCall -> this.rsocketHandler
                         .send(scheduledCall.getSubscriptionId(),

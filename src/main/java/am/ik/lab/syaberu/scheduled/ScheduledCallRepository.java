@@ -21,16 +21,16 @@ public class ScheduledCallRepository {
         this.databaseClient = databaseClient;
     }
 
-    public Mono<ScheduledCall> findScheduledOneOrderByScheduledAt() {
+    public Flux<ScheduledCall> findScheduledOrderByScheduledAt() {
         final LocalDateTime now = LocalDateTime.now();
         return this.databaseClient.select()
                 .from(ScheduledCall.class)
                 .matching(where("state").is(CallState.SCHEDULED)
                         .and(where("scheduled_at").lessThanOrEquals(now)))
                 .orderBy(Sort.Order.asc("scheduled_at"))
-                .page(PageRequest.of(0, 1))
+                .page(PageRequest.of(0, 4))
                 .fetch()
-                .one();
+                .all();
     }
 
     public Flux<ScheduledCall> findOrderByScheduledAt(String subscriptionId) {
