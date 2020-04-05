@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "scheduled_calls")
+@CrossOrigin
 public class ScheduledCallController {
     private final ScheduledCallRepository scheduledCallRepository;
     private final Validator<JsonNode> validator = ValidatorBuilder.<JsonNode>of()
