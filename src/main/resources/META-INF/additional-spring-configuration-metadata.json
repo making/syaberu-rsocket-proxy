@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "scheduler.interval",
+      "type": "java.lang.String",
+      "description": "The interval for scheduled calls."
+    }
+  ]
+}
