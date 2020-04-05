@@ -12,10 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.io.UncheckedIOException;
 import java.nio.channels.ClosedChannelException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -42,10 +39,16 @@ public class RsocketHandler {
     public Mono<?> send(String subscriptionId, String text, String speaker, String emotion, String apiKey) {
         final List<RSocketRequester> requesters = this.requestersMap.getOrDefault(subscriptionId, Collections.emptyList());
         log.info("Number of subscriber for {}: {}", subscriptionId, requesters.size());
-        final Map<String, String> data = Map.of("apiKey", RsocketHandler.this.apiKeyEncryptor.encrypt(apiKey),
-                "text", text,
-                "speaker", speaker,
-                "emotion", emotion);
+        final Map<String, String> data = new LinkedHashMap<>() {
+            {
+                put("apiKey", RsocketHandler.this.apiKeyEncryptor.encrypt(apiKey));
+                put("text", text);
+                put("speaker", speaker);
+                if (emotion != null) {
+                    put("emotion", emotion);
+                }
+            }
+        };
         try {
             final String json = this.objectMapper.writeValueAsString(data);
             return Flux.fromIterable(new ArrayList<>(requesters) /* shallow copy */)
