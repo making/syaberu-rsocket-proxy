@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import static am.ik.lab.syaberu.scheduled._ScheduledCallArgumentsMeta.*;
+
 @RestController
 @CrossOrigin
 public class RsocketReciver {
@@ -29,9 +31,9 @@ public class RsocketReciver {
         return exchange.getFormData()
                 .flatMap(form -> this.rsocketHandler
                         .send(subscriptionId,
-                                form.getFirst("text"),
-                                form.getFirst("speaker"),
-                                form.getFirst("emotion"),
+                                form.getFirst(TEXT.name()),
+                                form.getFirst(SPEAKER.name()),
+                                form.getFirst(EMOTION.name()),
                                 apiKey));
     }
 }

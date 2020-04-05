@@ -1,5 +1,6 @@
 package am.ik.lab.syaberu.scheduled;
 
+import am.ik.yavi.meta.ConstraintArguments;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class ScheduledCall {
     private final LocalDateTime scheduledAt;
     private final CallState state;
 
+    @ConstraintArguments
     public ScheduledCall(String id, String subscriptionId, String text, String speaker, String emotion, String apiKey, LocalDateTime scheduledAt, CallState state) {
         this.id = id;
         this.subscriptionId = subscriptionId;

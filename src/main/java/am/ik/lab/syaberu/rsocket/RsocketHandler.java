@@ -16,6 +16,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static am.ik.lab.syaberu.scheduled._ScheduledCallArgumentsMeta.*;
+
 @Component
 public class RsocketHandler {
     private final Logger log = LoggerFactory.getLogger(RsocketHandler.class);
@@ -41,11 +43,11 @@ public class RsocketHandler {
         log.info("Number of subscriber for {}: {}", subscriptionId, requesters.size());
         final Map<String, String> data = new LinkedHashMap<>() {
             {
-                put("apiKey", RsocketHandler.this.apiKeyEncryptor.encrypt(apiKey));
-                put("text", text);
-                put("speaker", speaker);
+                put(APIKEY.name(), RsocketHandler.this.apiKeyEncryptor.encrypt(apiKey));
+                put(TEXT.name(), text);
+                put(SPEAKER.name(), speaker);
                 if (emotion != null) {
-                    put("emotion", emotion);
+                    put(EMOTION.name(), emotion);
                 }
             }
         };
