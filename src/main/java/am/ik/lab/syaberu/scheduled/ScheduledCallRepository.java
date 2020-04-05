@@ -28,7 +28,7 @@ public class ScheduledCallRepository {
                 .matching(where("state").is(CallState.SCHEDULED)
                         .and(where("scheduled_at").lessThanOrEquals(now)))
                 .orderBy(Sort.Order.asc("scheduled_at"))
-                .page(PageRequest.of(0, 4))
+                .page(PageRequest.of(0, 8))
                 .fetch()
                 .all();
     }

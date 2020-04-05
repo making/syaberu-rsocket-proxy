@@ -30,15 +30,17 @@ public class CallScheduler {
             return;
         }
         this.scheduledCallRepository.findScheduledOrderByScheduledAt()
-                .doOnNext(scheduledCall -> log.info("scheduling {}", scheduledCall))
-                .flatMap(scheduledCall -> this.rsocketHandler
-                        .send(scheduledCall.getSubscriptionId(),
-                                scheduledCall.getText(),
-                                scheduledCall.getSpeaker(),
-                                scheduledCall.getEmotion(),
-                                scheduledCall.getApiKey())
-                        .flatMap(__ -> this.scheduledCallRepository.changeStateById(scheduledCall.getId(), CallState.SUCCEEDED, scheduledCall.getScheduledAt()))
-                        .onErrorResume(e -> this.scheduledCallRepository.changeStateById(scheduledCall.getId(), CallState.FAILED, scheduledCall.getScheduledAt())))
+                .flatMapSequential(scheduledCall -> {
+                    log.info("Calling {}", scheduledCall);
+                    return this.rsocketHandler
+                            .send(scheduledCall.getSubscriptionId(),
+                                    scheduledCall.getText(),
+                                    scheduledCall.getSpeaker(),
+                                    scheduledCall.getEmotion(),
+                                    scheduledCall.getApiKey())
+                            .flatMap(__ -> this.scheduledCallRepository.changeStateById(scheduledCall.getId(), CallState.SUCCEEDED, scheduledCall.getScheduledAt()))
+                            .onErrorResume(e -> this.scheduledCallRepository.changeStateById(scheduledCall.getId(), CallState.FAILED, scheduledCall.getScheduledAt()));
+                }, 1)
                 .subscribe();
     }
 }
