@@ -1,11 +1,17 @@
 applications:
 - name: syaberu-rsocket-proxy
-  path: target/syaberu-rsocket-proxy-0.0.1-SNAPSHOT.jar
+  path: target/syaberu-rsocket-proxy-0.1.0-SNAPSHOT.jar
   memory: 256m
+  health-check-type: http
+  health-check-http-endpoint: /actuator/health
   services:
+  - syaberu-db
   - syaberu-encryption
   - prometheus-rsocket-proxy
   env:
+    SPRING_R2DBC_URL: r2dbc:mysql://${vcap.services.syaberu-db.credentials.hostname}:${vcap.services.syaberu-db.credentials.port}/${vcap.services.syaberu-db.credentials.name}
+    SPRING_R2DBC_USERNAME: ${vcap.services.syaberu-db.credentials.username}
+    SPRING_R2DBC_PASSWORD: ${vcap.services.syaberu-db.credentials.password}
     ENCRYPTION_PASSWORD: ${vcap.services.syaberu-encryption.credentials.password}
     ENCRYPTION_SALT: ${vcap.services.syaberu-encryption.credentials.salt}
     JAVA_OPTS: -XX:ReservedCodeCacheSize=32M -Xss512k -Duser.timezone=Asia/Tokyo

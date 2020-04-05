@@ -1,4 +1,4 @@
-package am.ik.lab.syaberu;
+package am.ik.lab.syaberu.encypt;
 
 import org.springframework.stereotype.Component;
 
