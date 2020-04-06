@@ -1,13 +1,12 @@
 package am.ik.lab.syaberu.rsocket;
 
+import am.ik.lab.syaberu.scheduled._ScheduledCallParameters;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.messaging.rsocket.annotation.ConnectMapping;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import static am.ik.lab.syaberu.scheduled._ScheduledCallArgumentsMeta.*;
 
 @RestController
 @CrossOrigin
@@ -31,9 +30,9 @@ public class RsocketReciver {
         return exchange.getFormData()
                 .flatMap(form -> this.rsocketHandler
                         .send(subscriptionId,
-                                form.getFirst(TEXT.name()),
-                                form.getFirst(SPEAKER.name()),
-                                form.getFirst(EMOTION.name()),
+                                form.getFirst(_ScheduledCallParameters.Text.LOWER_CAMEL),
+                                form.getFirst(_ScheduledCallParameters.Speaker.LOWER_CAMEL),
+                                form.getFirst(_ScheduledCallParameters.Emotion.LOWER_CAMEL),
                                 apiKey));
     }
 }

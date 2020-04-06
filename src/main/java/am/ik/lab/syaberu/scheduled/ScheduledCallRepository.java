@@ -25,9 +25,9 @@ public class ScheduledCallRepository {
         final LocalDateTime now = LocalDateTime.now();
         return this.databaseClient.select()
                 .from(ScheduledCall.class)
-                .matching(where("state").is(CallState.SCHEDULED)
-                        .and("scheduled_at").lessThanOrEquals(now))
-                .orderBy(Sort.Order.asc("scheduled_at"))
+                .matching(where(_ScheduledCallParameters.State.LOWER_UNDERSCORE).is(CallState.SCHEDULED)
+                        .and(_ScheduledCallParameters.ScheduledAt.LOWER_UNDERSCORE).lessThanOrEquals(now))
+                .orderBy(Sort.Order.asc(_ScheduledCallParameters.ScheduledAt.LOWER_UNDERSCORE))
                 .page(PageRequest.of(0, 8))
                 .fetch()
                 .all();
@@ -37,9 +37,9 @@ public class ScheduledCallRepository {
         final LocalDateTime ago = LocalDateTime.now().minusHours(3);
         return this.databaseClient.select()
                 .from(ScheduledCall.class)
-                .matching(where("subscription_id").is(subscriptionId)
-                        .and("scheduled_at").greaterThanOrEquals(ago))
-                .orderBy(Sort.Order.asc("scheduled_at"))
+                .matching(where(_ScheduledCallParameters.SubscriptionId.LOWER_UNDERSCORE).is(subscriptionId)
+                        .and(_ScheduledCallParameters.ScheduledAt.LOWER_UNDERSCORE).greaterThanOrEquals(ago))
+                .orderBy(Sort.Order.asc(_ScheduledCallParameters.ScheduledAt.LOWER_UNDERSCORE))
                 .page(PageRequest.of(0, 20))
                 .fetch()
                 .all();
@@ -57,11 +57,11 @@ public class ScheduledCallRepository {
     @Transactional
     public Mono<Void> changeStateById(String id, CallState state, LocalDateTime scheduledAt) {
         return this.databaseClient.update()
-                .table("scheduled_call")
+                .table(_ScheduledCallParameters.LOWER_UNDERSCORE)
                 .using(Update
-                        .update("state", state)
-                        .set("scheduled_at", scheduledAt))
-                .matching(where("id").is(id))
+                        .update(_ScheduledCallParameters.State.LOWER_UNDERSCORE, state)
+                        .set(_ScheduledCallParameters.ScheduledAt.LOWER_UNDERSCORE, scheduledAt))
+                .matching(where(_ScheduledCallParameters.Id.LOWER_UNDERSCORE).is(id))
                 .then();
     }
 
@@ -69,7 +69,7 @@ public class ScheduledCallRepository {
     public Mono<Void> delete(String id) {
         return this.databaseClient.delete()
                 .from(ScheduledCall.class)
-                .matching(where("id").is(id))
+                .matching(where(_ScheduledCallParameters.Id.LOWER_UNDERSCORE).is(id))
                 .then();
     }
 }

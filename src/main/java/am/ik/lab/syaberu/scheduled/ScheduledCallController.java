@@ -14,27 +14,25 @@ import java.time.ZoneId;
 import java.util.Map;
 import java.util.UUID;
 
-import static am.ik.lab.syaberu.scheduled._ScheduledCallArgumentsMeta.*;
-
 @RestController
 @RequestMapping(path = "scheduled_calls")
 @CrossOrigin
 public class ScheduledCallController {
     private final ScheduledCallRepository scheduledCallRepository;
     private final Validator<JsonNode> validator = ValidatorBuilder.<JsonNode>of()
-            ._object(x -> x.get(SUBSCRIPTIONID.name()), SUBSCRIPTIONID.name(), c -> c.notNull().message("\"" + SUBSCRIPTIONID.name() + "\" is required."))
-            ._boolean(x -> !x.has(SUBSCRIPTIONID.name()) || x.get(SUBSCRIPTIONID.name()).isTextual(), SUBSCRIPTIONID.name(), c -> c.isTrue().message("\"" + SUBSCRIPTIONID.name() + "\" must be textual."))
-            ._object(x -> x.get(TEXT.name()), TEXT.name(), c -> c.notNull().message("\"" + TEXT.name() + "\" is required."))
-            ._boolean(x -> !x.has(TEXT.name()) || x.get(TEXT.name()).isTextual(), TEXT.name(), c -> c.isTrue().message("\"" + TEXT.name() + "\" must be textual."))
-            ._boolean(x -> !x.has(TEXT.name()) || !x.get(TEXT.name()).asText().isEmpty(), TEXT.name(), c -> c.isTrue().message("\"" + TEXT.name() + "\" must not be empty."))
-            ._boolean(x -> !x.has(TEXT.name()) || x.get(TEXT.name()).asText().length() <= 200, TEXT.name(), c -> c.isTrue().message("The length of \"" + TEXT.name() + "\" must be less than or equal to 200."))
-            ._object(x -> x.get(SPEAKER.name()), SPEAKER.name(), c -> c.notNull().message("\"" + SPEAKER.name() + "\" is required."))
-            ._boolean(x -> !x.has(SPEAKER.name()) || x.get(SPEAKER.name()).isTextual(), SPEAKER.name(), c -> c.isTrue().message("\"" + SPEAKER.name() + "\" must be textual."))
-            ._object(x -> x.get(APIKEY.name()), APIKEY.name(), c -> c.notNull().message("\"" + APIKEY.name() + "\" is required."))
-            ._boolean(x -> !x.has(APIKEY.name()) || x.get(APIKEY.name()).isTextual(), APIKEY.name(), c -> c.isTrue().message("\"" + APIKEY.name() + "\" must be textual."))
-            ._object(x -> x.get(SCHEDULEDAT.name()), SCHEDULEDAT.name(), c -> c.notNull().message("\"" + SCHEDULEDAT.name() + "\" is required."))
-            ._boolean(x -> !x.has(SCHEDULEDAT.name()) || x.get(SCHEDULEDAT.name()).isLong(), SCHEDULEDAT.name(), c -> c.isTrue().message("\"" + SCHEDULEDAT.name() + "\" must be long."))
-            ._boolean(x -> !x.has(SCHEDULEDAT.name()) || !x.get(SCHEDULEDAT.name()).isLong() || Instant.ofEpochMilli(x.get(SCHEDULEDAT.name()).asLong()).isAfter(Instant.now()), SCHEDULEDAT.name(), c -> c.isTrue().message("\"" + SCHEDULEDAT.name() + "\" must be future."))
+            ._object(x -> x.get(_ScheduledCallParameters.SubscriptionId.LOWER_CAMEL), _ScheduledCallParameters.SubscriptionId.LOWER_CAMEL, c -> c.notNull().message("\"" + _ScheduledCallParameters.SubscriptionId.LOWER_CAMEL + "\" is required."))
+            ._boolean(x -> !x.has(_ScheduledCallParameters.SubscriptionId.LOWER_CAMEL) || x.get(_ScheduledCallParameters.SubscriptionId.LOWER_CAMEL).isTextual(), _ScheduledCallParameters.SubscriptionId.LOWER_CAMEL, c -> c.isTrue().message("\"" + _ScheduledCallParameters.SubscriptionId.LOWER_CAMEL + "\" must be textual."))
+            ._object(x -> x.get(_ScheduledCallParameters.Text.LOWER_CAMEL), _ScheduledCallParameters.Text.LOWER_CAMEL, c -> c.notNull().message("\"" + _ScheduledCallParameters.Text.LOWER_CAMEL + "\" is required."))
+            ._boolean(x -> !x.has(_ScheduledCallParameters.Text.LOWER_CAMEL) || x.get(_ScheduledCallParameters.Text.LOWER_CAMEL).isTextual(), _ScheduledCallParameters.Text.LOWER_CAMEL, c -> c.isTrue().message("\"" + _ScheduledCallParameters.Text.LOWER_CAMEL + "\" must be textual."))
+            ._boolean(x -> !x.has(_ScheduledCallParameters.Text.LOWER_CAMEL) || !x.get(_ScheduledCallParameters.Text.LOWER_CAMEL).asText().isEmpty(), _ScheduledCallParameters.Text.LOWER_CAMEL, c -> c.isTrue().message("\"" + _ScheduledCallParameters.Text.LOWER_CAMEL + "\" must not be empty."))
+            ._boolean(x -> !x.has(_ScheduledCallParameters.Text.LOWER_CAMEL) || x.get(_ScheduledCallParameters.Text.LOWER_CAMEL).asText().length() <= 200, _ScheduledCallParameters.Text.LOWER_CAMEL, c -> c.isTrue().message("The length of \"" + _ScheduledCallParameters.Text.LOWER_CAMEL + "\" must be less than or equal to 200."))
+            ._object(x -> x.get(_ScheduledCallParameters.Speaker.LOWER_CAMEL), _ScheduledCallParameters.Speaker.LOWER_CAMEL, c -> c.notNull().message("\"" + _ScheduledCallParameters.Speaker.LOWER_CAMEL + "\" is required."))
+            ._boolean(x -> !x.has(_ScheduledCallParameters.Speaker.LOWER_CAMEL) || x.get(_ScheduledCallParameters.Speaker.LOWER_CAMEL).isTextual(), _ScheduledCallParameters.Speaker.LOWER_CAMEL, c -> c.isTrue().message("\"" + _ScheduledCallParameters.Speaker.LOWER_CAMEL + "\" must be textual."))
+            ._object(x -> x.get(_ScheduledCallParameters.ApiKey.LOWER_CAMEL), _ScheduledCallParameters.ApiKey.LOWER_CAMEL, c -> c.notNull().message("\"" + _ScheduledCallParameters.ApiKey.LOWER_CAMEL + "\" is required."))
+            ._boolean(x -> !x.has(_ScheduledCallParameters.ApiKey.LOWER_CAMEL) || x.get(_ScheduledCallParameters.ApiKey.LOWER_CAMEL).isTextual(), _ScheduledCallParameters.ApiKey.LOWER_CAMEL, c -> c.isTrue().message("\"" + _ScheduledCallParameters.ApiKey.LOWER_CAMEL + "\" must be textual."))
+            ._object(x -> x.get(_ScheduledCallParameters.ScheduledAt.LOWER_CAMEL), _ScheduledCallParameters.ScheduledAt.LOWER_CAMEL, c -> c.notNull().message("\"" + _ScheduledCallParameters.ScheduledAt.LOWER_CAMEL + "\" is required."))
+            ._boolean(x -> !x.has(_ScheduledCallParameters.ScheduledAt.LOWER_CAMEL) || x.get(_ScheduledCallParameters.ScheduledAt.LOWER_CAMEL).isLong(), _ScheduledCallParameters.ScheduledAt.LOWER_CAMEL, c -> c.isTrue().message("\"" + _ScheduledCallParameters.ScheduledAt.LOWER_CAMEL + "\" must be long."))
+            ._boolean(x -> !x.has(_ScheduledCallParameters.ScheduledAt.LOWER_CAMEL) || !x.get(_ScheduledCallParameters.ScheduledAt.LOWER_CAMEL).isLong() || Instant.ofEpochMilli(x.get(_ScheduledCallParameters.ScheduledAt.LOWER_CAMEL).asLong()).isAfter(Instant.now()), _ScheduledCallParameters.ScheduledAt.LOWER_CAMEL, c -> c.isTrue().message("\"" + _ScheduledCallParameters.ScheduledAt.LOWER_CAMEL + "\" must be future."))
             .build();
 
     public ScheduledCallController(ScheduledCallRepository scheduledCallRepository) {
@@ -42,7 +40,7 @@ public class ScheduledCallController {
     }
 
     @GetMapping(path = "subscriptions/{subscriptionId}")
-    public Flux<ScheduledCall> getScheduledCalls(@PathVariable("subscriptionId") String subscriptionId) {
+    public Flux<ScheduledCall> getScheduledCalls(@PathVariable String subscriptionId) {
         return this.scheduledCallRepository.findOrderByScheduledAt(subscriptionId);
     }
 
@@ -51,10 +49,10 @@ public class ScheduledCallController {
         return this.validator.validateToEither(json)
                 .bimap(violations -> Map.of("error", "Bad Request", "details", violations.details()),
                         body -> new ScheduledCall(UUID.randomUUID().toString(),
-                                body.get(SUBSCRIPTIONID.name()).asText(), body.get(TEXT.name()).asText(),
-                                body.get(SPEAKER.name()).asText(),
-                                body.has(EMOTION.name()) ? body.get(EMOTION.name()).asText() : null,
-                                body.get(APIKEY.name()).asText(), Instant.ofEpochMilli(body.get(SCHEDULEDAT.name()).asLong()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                                body.get(_ScheduledCallParameters.SubscriptionId.LOWER_CAMEL).asText(), body.get(_ScheduledCallParameters.Text.LOWER_CAMEL).asText(),
+                                body.get(_ScheduledCallParameters.Speaker.LOWER_CAMEL).asText(),
+                                body.has(_ScheduledCallParameters.Emotion.LOWER_CAMEL) ? body.get(_ScheduledCallParameters.Emotion.LOWER_CAMEL).asText() : null,
+                                body.get(_ScheduledCallParameters.ApiKey.LOWER_CAMEL).asText(), Instant.ofEpochMilli(body.get(_ScheduledCallParameters.ScheduledAt.LOWER_CAMEL).asLong()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
                                 CallState.SCHEDULED))
                 .fold(details -> Mono.just(ResponseEntity.badRequest().body(details)),
                         scheduledCall ->

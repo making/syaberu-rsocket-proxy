@@ -1,6 +1,7 @@
 package am.ik.lab.syaberu.rsocket;
 
 import am.ik.lab.syaberu.encypt.ApiKeyEncryptor;
+import am.ik.lab.syaberu.scheduled._ScheduledCallParameters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static am.ik.lab.syaberu.scheduled._ScheduledCallArgumentsMeta.*;
 
 @Component
 public class RsocketHandler {
@@ -43,11 +43,11 @@ public class RsocketHandler {
         log.info("Number of subscriber for {}: {}", subscriptionId, requesters.size());
         final Map<String, String> data = new LinkedHashMap<>() {
             {
-                put(APIKEY.name(), RsocketHandler.this.apiKeyEncryptor.encrypt(apiKey));
-                put(TEXT.name(), text);
-                put(SPEAKER.name(), speaker);
+                put(_ScheduledCallParameters.ApiKey.LOWER_CAMEL, RsocketHandler.this.apiKeyEncryptor.encrypt(apiKey));
+                put(_ScheduledCallParameters.Text.LOWER_CAMEL, text);
+                put(_ScheduledCallParameters.Speaker.LOWER_CAMEL, speaker);
                 if (emotion != null) {
-                    put(EMOTION.name(), emotion);
+                    put(_ScheduledCallParameters.Emotion.LOWER_CAMEL, emotion);
                 }
             }
         };
