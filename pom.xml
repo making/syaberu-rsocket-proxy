@@ -59,7 +59,7 @@
         <dependency>
             <groupId>io.micrometer.prometheus</groupId>
             <artifactId>prometheus-rsocket-spring</artifactId>
-            <version>0.9.0</version>
+            <version>1.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
